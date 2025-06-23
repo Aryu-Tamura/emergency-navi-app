@@ -1,6 +1,6 @@
 // =================================================================
-// 10. 上書き: frontend/src/components/EmergencyScreen.js
-// (症状に応じた画面遷移ロジックを追加)
+// 5. 上書き: frontend/src/components/EmergencyScreen.js
+// (onGoHomeを受け取るように変更)
 // =================================================================
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -16,7 +16,7 @@ const DUMMY_SCENARIO_DATA = {
     "others_instructions": { "id": "others_instructions", "step_type": "INSTRUCTION", "message": "専門家の指示に従ってください" }
 };
 
-const EmergencyScreen = () => {
+const EmergencyScreen = ({ onGoHome }) => {
     const [history, setHistory] = useState(['start']);
     const [currentStep, setCurrentStep] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -50,6 +50,8 @@ const EmergencyScreen = () => {
     const handleGoBack = () => {
         if (history.length > 1) {
             setHistory(prev => prev.slice(0, -1));
+        } else {
+            onGoHome(); // 最初の質問で戻ったらホーム画面へ
         }
     };
     
@@ -57,7 +59,6 @@ const EmergencyScreen = () => {
         if (symptom === 'Heat_Stroke') {
             handleNextStep('heatstroke_instructions');
         } else {
-            // For "Others" or "No_Problem" or any error case
             handleNextStep('others_instructions');
         }
     };
@@ -75,9 +76,9 @@ const EmergencyScreen = () => {
             case 'AMBULANCE_CALL':
                 return <AmbulanceCallComponent {...props} onProceed={handleProceedToInstructions} />;
             case 'INSTRUCTION':
-                return <InstructionComponent {...props} />;
+                return <InstructionComponent {...props} onGoHome={onGoHome} />;
             case 'FINAL_NO_EMERGENCY':
-                 return <FinalScreen {...props} />;
+                 return <FinalScreen {...props} onGoHome={onGoHome} />;
             default:
                 return <div>不明なステップタイプです。</div>;
         }

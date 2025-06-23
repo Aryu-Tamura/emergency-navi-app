@@ -1,6 +1,6 @@
 // =================================================================
-// 8. 上書き: frontend/src/components/AmbulanceCallComponent.js
-// (AIロジック修正、UI調整)
+// 4. 上書き: frontend/src/components/AmbulanceCallComponent.js
+// (電話番号表示を追加)
 // =================================================================
 import React, { useState, useRef, useEffect } from 'react';
 import { useSettings } from '../context/SettingsContext';
@@ -72,7 +72,7 @@ const AmbulanceCallComponent = ({ step, onProceed, onGoBack }) => {
         } catch (err) {
             console.error("AI要約エラー:", err);
             setError("AIによる要約に失敗しました。バックエンドの起動とAPIキーを確認してください。");
-            setSymptom("Others"); // エラー時は汎用的な症状にフォールバック
+            setSymptom("Others"); 
         } finally {
             setIsSummarizing(false);
         }
@@ -86,6 +86,7 @@ const AmbulanceCallComponent = ({ step, onProceed, onGoBack }) => {
                 <div className="call-script">
                     <p><strong>「救急です。」</strong></p>
                     <p>「住所は {settings.address || '(未設定)'} です」</p>
+                    <p>「電話番号は {settings.phoneNumber || '(未設定)'} です」</p>
                     <p>「男性（女性）、〇〇歳くらいです」</p>
                 </div>
                 <div className="audio-input-section">
@@ -114,7 +115,7 @@ const AmbulanceCallComponent = ({ step, onProceed, onGoBack }) => {
             </div>
             {summary &&
                 <div className="footer-actions">
-                    <button onClick={() => onProceed(symptom)} className="button button-success">応急処置にうつる</button>
+                    <button onClick={() => onProceed(symptom || 'Heat_Stroke')} className="button button-success">応急処置にうつる</button>
                 </div>
             }
         </div>

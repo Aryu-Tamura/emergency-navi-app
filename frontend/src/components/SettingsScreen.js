@@ -1,14 +1,14 @@
+
 // =================================================================
-// 6. 上書き: frontend/src/components/SettingsScreen.js
+// 4. 上書き: frontend/src/components/SettingsScreen.js
+// (useNavigateを削除し、propsで画面遷移)
 // =================================================================
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
 
-const SettingsScreen = () => {
+const SettingsScreen = ({ onGoHome }) => {
     const { settings, updateSettings } = useSettings();
     const [localSettings, setLocalSettings] = useState(settings);
-    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setLocalSettings({...localSettings, [e.target.name]: e.target.value});
@@ -17,7 +17,7 @@ const SettingsScreen = () => {
     const handleSave = () => {
         updateSettings(localSettings);
         alert('設定を保存しました。');
-        navigate('/');
+        onGoHome();
     };
 
     return (
@@ -33,7 +33,7 @@ const SettingsScreen = () => {
                     <input type="tel" id="phoneNumber" name="phoneNumber" value={localSettings.phoneNumber} onChange={handleChange} placeholder="例: 03-1234-5678" />
                 </div>
                 <div className="footer-actions">
-                    <button onClick={() => navigate('/')} className="button button-secondary">戻る</button>
+                    <button onClick={onGoHome} className="button button-secondary">戻る</button>
                     <button onClick={handleSave} className="button button-primary">この内容で保存</button>
                 </div>
             </div>

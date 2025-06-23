@@ -1,13 +1,10 @@
 // =================================================================
-// 5. frontend/src/components/FinalScreen.js (変更なし)
+// 7. 上書き: frontend/src/components/FinalScreen.js
+// (onGoHomeを受け取るように変更)
 // =================================================================
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
-const FinalScreen = ({ step }) => {
-    const navigate = useNavigate();
-
-    // === 安全装置: stepデータがなければクラッシュしない ===
+const FinalScreen = ({ step, onGoHome }) => {
     if (!step) {
         return null;
     }
@@ -17,7 +14,7 @@ const FinalScreen = ({ step }) => {
             <h2 className="screen-header">{step.message}</h2>
             <p style={{fontSize: 'var(--font-size-md)', color: '#555'}}>必要に応じて、かかりつけ医や近隣の医療機関にご相談ください。</p>
             <div className="footer-actions">
-                <button onClick={() => navigate('/')} className="button button-primary">ホーム画面に戻る</button>
+                <button onClick={onGoHome} className="button button-primary">ホーム画面に戻る</button>
             </div>
         </div>
     );
